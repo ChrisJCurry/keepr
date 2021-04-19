@@ -22,7 +22,12 @@ namespace Services
 
         internal Keep Get(int id)
         {
-            return (_kRepo.Get(id));
+            Keep curKeep = _kRepo.Get(id);
+            if (curKeep == null)
+            {
+                throw new Exception("This doesn't exist.");
+            }
+            return (curKeep);
         }
 
         internal Keep Create(Keep keep)
@@ -44,15 +49,19 @@ namespace Services
             return (_kRepo.Edit(keep));
         }
 
-        internal string Delete(int id, Profile userInfo)
+        internal string Delete(int id, string userId)
         {
             Keep original = Get(id);
-            if (userInfo.Id != original.CreatorId)
+            if (userId != original.CreatorId)
             {
                 throw new Exception("You are not the creator, you can't delete this");
             }
+            if (original == null)
+            {
+                throw new Exception("You can't delete something that's already deleted.");
+            }
             _kRepo.Delete(id);
-            return ("Deleted");
+            return "deleted";
         }
 
         internal IEnumerable<VaultKeepModel> GetByVault(int id)
@@ -63,6 +72,11 @@ namespace Services
         internal IEnumerable<Keep> GetKeepsByAccountId(string id)
         {
             return _kRepo.GetByCreatorId(id);
+        }
+        internal IEnumerable<Keep> GetByCreatorId(string id)
+        {
+            IEnumerable<Keep> keeps = _kRepo.GetByCreatorId(id);
+            return keeps;
         }
     }
 }

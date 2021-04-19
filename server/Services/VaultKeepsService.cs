@@ -20,5 +20,12 @@ namespace Services
 
             return _vkRepo.Create(newVK);
         }
+
+        internal string DeleteAsync(int vaultKeepId, string userId)
+        {
+            _vkRepo.Delete(vaultKeepId);
+            return "deleted";
+
+        }
     }
 }

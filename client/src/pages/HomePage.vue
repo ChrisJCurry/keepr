@@ -3,7 +3,6 @@
     <div class="card-columns mt-3">
       <div v-for="k in state.keeps" :key="k.id">
         <Keep :keep-prop="k" />
-        <KeepModal :keep-prop="k" />
       </div>
     </div>
   </div>
@@ -17,7 +16,9 @@ export default {
   name: 'Home',
   setup() {
     const state = reactive({
-      keeps: computed(() => AppState.keeps)
+      keeps: computed(() => AppState.keeps),
+      vaults: computed(() => AppState.vaults),
+      account: computed(() => AppState.account)
     })
     onMounted(async() => {
       await keepsService.GetAll()

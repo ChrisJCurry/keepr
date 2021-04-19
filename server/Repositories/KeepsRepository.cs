@@ -20,7 +20,7 @@ namespace Repositories
         {
             string sql = @"
             SELECT
-            keep.*,
+            keep.creatorId, keep.img, keep.name, keep.id,
             profile.*
             FROM keeps keep
             JOIN profiles profile ON keep.creatorId = profile.id;";
@@ -34,6 +34,10 @@ namespace Repositories
         internal Keep Get(int id)
         {
             string sql = @"
+            UPDATE keeps
+            SET
+                views = views + 1
+            WHERE id = @id;
             SELECT
             keep.*,
             profile.*

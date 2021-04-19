@@ -13,11 +13,31 @@ class KeepsService {
     }
   }
 
-  async GetByProfile(id) {
+  async getAccountKeeps(id) {
     try {
       const res = await api.get('account/keeps')
       logger.log(res)
       AppState.userKeeps = res.data
+    } catch (err) {
+      logger.log(err)
+    }
+  }
+
+  async getByProfile(id) {
+    try {
+      const res = await api.get('api/profiles/' + id + '/keeps')
+      logger.log(res)
+      AppState.keeps = res.data
+    } catch (err) {
+      logger.log(err)
+    }
+  }
+
+  async getById(id) {
+    try {
+      const res = await api.get('api/keeps/' + id)
+      logger.log(res)
+      AppState.keep = res.data
     } catch (err) {
       logger.log(err)
     }

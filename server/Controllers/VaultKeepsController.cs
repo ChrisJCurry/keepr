@@ -31,5 +31,18 @@ namespace Controllers
                 return BadRequest(err.Message);
             }
         }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<VaultKeep>> DeleteAsync(int id)
+        {
+            try
+            {
+                Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+                return Ok(_vkService.DeleteAsync(id, userInfo.Id));
+            }
+            catch (System.Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
     }
 }

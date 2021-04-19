@@ -10,11 +10,11 @@
         "projectUniqueName": "C:\\source\\codeworks\\c-sharp\\keepr\\server\\server.csproj",
         "projectName": "server",
         "projectPath": "C:\\source\\codeworks\\c-sharp\\keepr\\server\\server.csproj",
-        "packagesPath": "C:\\Users\\Chris\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\heres\\.nuget\\packages\\",
         "outputPath": "C:\\source\\codeworks\\c-sharp\\keepr\\server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Chris\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\heres\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -77,7 +77,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

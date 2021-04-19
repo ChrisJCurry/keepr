@@ -67,9 +67,9 @@ namespace Repositories
         {
             string sql = @"
             INSERT INTO vaults
-            (creatorId, name, description, isPublic)
+            (creatorId, name, description, isPrivate)
             VALUES
-            (@CreatorId, @Name, @Description, @IsPublic);
+            (@CreatorId, @Name, @Description, @IsPrivate);
             SELECT LAST_INSERT_ID();";
             return (_db.ExecuteScalar<int>(sql, newVault));
         }
@@ -87,7 +87,7 @@ namespace Repositories
             SET
                 name = @Name,
                 description = @Description,
-                isPublic = @IsPublic
+                isPrivate = @IsPrivate
             WHERE id = @Id;";
             _db.Execute(sql, update);
             return update;

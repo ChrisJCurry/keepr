@@ -12,6 +12,7 @@
   </footer>
   <NewVaultModal />
   <NewKeepModal />
+  <KeepModal />
 </template>
 
 <script>

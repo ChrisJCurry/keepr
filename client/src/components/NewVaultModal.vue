@@ -29,7 +29,7 @@
             </div>
           </div>
           <div class="col-12 p-0">
-            <input type="checkbox" id="vault-private" v-model="state.newVault.isPublic" />
+            <input type="checkbox" id="vault-private" v-model="state.newVault.isPrivate" />
             <p class="label-muted">
               Leave this unchecked if you don't want it visible to anyone else.
             </p>
@@ -64,6 +64,7 @@ export default {
         try {
           logger.log(state.newVault)
           await vaultsService.create(state.newVault)
+          await vaultsService.getAccountVaults()
         } catch (err) {
           logger.log(err)
         }

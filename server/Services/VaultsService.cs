@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Models;
 using Repositories;
 
@@ -22,7 +23,12 @@ namespace Services
 
         internal Vault Get(int id)
         {
-            return (_vRepo.Get(id));
+            Vault curVault = _vRepo.Get(id);
+            if (curVault == null)
+            {
+                throw new Exception("Could not find this vault.");
+            }
+            return curVault;
         }
 
         internal Vault Create(Vault vault)
@@ -40,8 +46,14 @@ namespace Services
             }
             vault.Name = vault.Name == null ? original.Name : vault.Name;
             vault.Description = vault.Description == null ? original.Description : vault.Description;
-            vault.IsPublic = vault.IsPublic != original.IsPublic ? vault.IsPublic : original.IsPublic;
+            vault.IsPrivate = vault.IsPrivate != original.IsPrivate ? vault.IsPrivate : original.IsPrivate;
             return (_vRepo.Edit(vault));
+        }
+
+        internal IEnumerable<Vault> GetByCreatorId(string id)
+        {
+            IEnumerable<Vault> vaults = _vRepo.GetByCreatorId(id);
+            return vaults.ToList().FindAll(v => !v.IsPrivate);
         }
 
         internal string Delete(int id, Profile userInfo)

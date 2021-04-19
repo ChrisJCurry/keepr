@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CodeWorks.Auth0Provider;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services;
@@ -46,6 +47,7 @@ namespace Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Keep>> CreateAsync([FromBody] Keep keep)
         {
             try
@@ -68,6 +70,8 @@ namespace Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
+
         public async Task<ActionResult<Keep>> EditAsync(int id, [FromBody] Keep keep)
         {
             try
@@ -85,12 +89,14 @@ namespace Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
+
         public async Task<ActionResult<Keep>> DeleteAsync(int id)
         {
             try
             {
                 Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
-                return Ok(_kService.Delete(id, userInfo));
+                return Ok(_kService.Delete(id, userInfo.Id));
             }
             catch (System.Exception err)
             {

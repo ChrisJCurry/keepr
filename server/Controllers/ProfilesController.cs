@@ -10,10 +10,14 @@ namespace Controllers
     public class ProfilesController : ControllerBase
     {
         private readonly ProfilesService _pservice;
+        private readonly VaultsService _vService;
+        private readonly KeepsService _kService;
 
-        public ProfilesController(ProfilesService pservice)
+        public ProfilesController(ProfilesService pservice, VaultsService vService, KeepsService kService)
         {
             _pservice = pservice;
+            _vService = vService;
+            _kService = kService;
         }
 
         [HttpGet("{id}")]
@@ -41,5 +45,31 @@ namespace Controllers
         //         return BadRequest(err.Message);
         //     }
         // }
+
+        [HttpGet("{id}/vaults")]
+        public ActionResult<Vault> GetVaults(string id)
+        {
+            try
+            {
+                return Ok(_vService.GetByCreatorId(id));
+            }
+            catch (System.Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
+
+        [HttpGet("{id}/keeps")]
+        public ActionResult<Vault> GetKeeps(string id)
+        {
+            try
+            {
+                return Ok(_kService.GetByCreatorId(id));
+            }
+            catch (System.Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
     }
 }
