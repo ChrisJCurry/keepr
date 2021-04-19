@@ -54,5 +54,10 @@ namespace Services
             _vRepo.Delete(id);
             return ("Deleted");
         }
+
+        internal IEnumerable<Vault> GetVaultsByAccountId(string id)
+        {
+            return _vRepo.GetByCreatorId(id);
+        }
     }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="about text-center">
+  <div class="account container-fluid text-center">
     <h1>Welcome {{ state.account.nickName }}</h1>
     <img class="rounded" :src="state.account.picture" alt="" />
     <p>{{ state.account.email }}</p>
@@ -13,8 +13,8 @@
         <i class="gg-add-r mr-2 icon"></i>
       </div>
     </div>
-    <div class="row">
-      Vaults go here...
+    <div class="row" v-if="state.userVaults">
+      <Vault v-for="v in state.userVaults" :key="v.id" :vault-prop="v" class="col-3 mx-2" />
     </div>
     <div class="row text-left ml-3">
       <div class="col-4 col-md-3">
@@ -46,15 +46,18 @@
 import { computed, onMounted, reactive } from 'vue'
 import { AppState } from '../AppState'
 import { keepsService } from '../services/KeepsService'
+import { vaultsService } from '../services/VaultsService'
 export default {
   name: 'Account',
   setup() {
     const state = reactive({
       account: computed(() => AppState.account),
-      userKeeps: computed(() => AppState.userKeeps)
+      userKeeps: computed(() => AppState.userKeeps),
+      userVaults: computed(() => AppState.userVaults)
     })
     onMounted(async() => {
       await keepsService.GetByProfile(state.account.id)
+      await vaultsService.GetByProfile(state.account.id)
     })
     return {
       state
