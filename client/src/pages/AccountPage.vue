@@ -14,7 +14,11 @@
       </div>
     </div>
     <div class="row" v-if="state.userVaults">
-      <Vault v-for="v in state.userVaults" :key="v.id" :vault-prop="v" class="col-3 mx-2" />
+      <div v-for="v in state.userVaults" :key="v.id" class="col-3 mx-2">
+        <router-link :to="{ name: 'Vault', params: {id: v.id} }">
+          <Vault :vault-prop="v" />
+        </router-link>
+      </div>
     </div>
     <div class="row text-left ml-3">
       <div class="col-4 col-md-3">

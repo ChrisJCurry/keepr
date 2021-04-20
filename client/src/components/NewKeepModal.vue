@@ -34,7 +34,7 @@
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Close
           </button>
-          <button type="button" class="btn btn-primary" @click="createKeep">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" @click="createKeep">
             Create Keep
           </button>
         </div>
@@ -49,7 +49,6 @@ import { logger } from '../utils/Logger'
 import { keepsService } from '../services/KeepsService'
 import { useRoute } from 'vue-router'
 import { AppState } from '../AppState'
-import $ from 'jquery'
 export default {
   name: 'NewKeepModal',
   setup() {
@@ -66,12 +65,11 @@ export default {
           logger.log(state.newKeep)
           state.newKeep.img = state.file
           await keepsService.create(state.newKeep)
+          logger.log(route.path)
           if (route.path === '/account') {
-            await keepsService.GetByProfile(state.account.id)
+            await keepsService.getByProfile(state.account.id)
           }
           state.newKeep = {}
-          $('#create-post').modal('hide')
-          $('.modal-backdrop').remove()
         } catch (err) {
           logger.log(err)
         }

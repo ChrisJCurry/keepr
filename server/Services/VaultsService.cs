@@ -21,12 +21,16 @@ namespace Services
             return vaults;
         }
 
-        internal Vault Get(int id)
+        internal Vault Get(int id, string userId)
         {
             Vault curVault = _vRepo.Get(id);
             if (curVault == null)
             {
                 throw new Exception("Could not find this vault.");
+            }
+            if (curVault.IsPrivate == true && userId != curVault.CreatorId)
+            {
+                throw new Exception("You don't have access to this.");
             }
             return curVault;
         }
@@ -39,7 +43,7 @@ namespace Services
 
         internal Vault Edit(Vault vault, string userId)
         {
-            Vault original = Get(vault.Id);
+            Vault original = Get(vault.Id, userId);
             if (userId != original.CreatorId)
             {
                 throw new Exception("You are not the creator, you can't edit this.");
@@ -58,7 +62,7 @@ namespace Services
 
         internal string Delete(int id, Profile userInfo)
         {
-            Vault original = Get(id);
+            Vault original = Get(id, userInfo.Id);
             if (userInfo.Id != original.CreatorId)
             {
                 throw new Exception("You are not the creator, you can't delete this");

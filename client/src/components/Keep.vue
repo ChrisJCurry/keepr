@@ -8,14 +8,14 @@
          :data-target="'#keep-modal'"
     >
     <div class="keep-overlay h2 text-white row ml-0">
-      <div class="col-10 keep-title">
-        {{ keepProp.name }}
-      </div>
-      <div class="col-2 keep-creator">
-        <router-link :to="{ name: 'Profile', params: {id: keepProp.creatorId} }">
+      <router-link :to="{ name: 'Profile', params: {id: keepProp.creatorId} }">
+        <div class="col-10 keep-title">
+          {{ keepProp.name }}
+        </div>
+        <div class="col-2 keep-creator" v-if="keepProp.creator">
           <img :src="keepProp.creator.picture" class="keep-profile">
-        </router-link>
-      </div>
+        </div>
+      </router-link>
     </div>
   </div>
 </template>

@@ -46,8 +46,32 @@ class KeepsService {
   async create(keepData) {
     try {
       const res = await api.post('api/keeps', keepData)
+      AppState.userKeeps.push(res.data)
       AppState.keeps.push(res.data)
       logger.log(res)
+    } catch (err) {
+      logger.log(err)
+    }
+  }
+
+  async addToVault(keep, vaultId) {
+    try {
+      const ids = {
+        keepId: keep.id,
+        vaultId: vaultId
+      }
+      const res = await api.post('api/vaultkeeps/', ids)
+      logger.log(res)
+    } catch (err) {
+      logger.log(err)
+    }
+  }
+
+  async getByVaultId(vaultId) {
+    try {
+      const res = await api.get('api/vaults/' + vaultId + '/keeps')
+      logger.log(res)
+      AppState.keeps = res.data
     } catch (err) {
       logger.log(err)
     }

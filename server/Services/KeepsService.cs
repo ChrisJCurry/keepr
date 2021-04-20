@@ -8,10 +8,12 @@ namespace Services
     public class KeepsService
     {
         private readonly KeepsRepository _kRepo;
+        private readonly VaultsService _vService;
 
-        public KeepsService(KeepsRepository kRepo)
+        public KeepsService(KeepsRepository kRepo, VaultsService vService)
         {
             _kRepo = kRepo;
+            _vService = vService;
         }
 
         internal IEnumerable<Keep> Get()
@@ -27,6 +29,8 @@ namespace Services
             {
                 throw new Exception("This doesn't exist.");
             }
+
+
             return (curKeep);
         }
 
@@ -64,8 +68,18 @@ namespace Services
             return "deleted";
         }
 
-        internal IEnumerable<VaultKeepModel> GetByVault(int id)
+        internal IEnumerable<VaultKeepModel> GetByVault(int id, string userId)
         {
+            Vault curVault = _vService.Get(id, userId);
+            if (curVault == null)
+            {
+                
+                throw new Exception("Could not find this vault.");
+            }
+            if (curVault.IsPrivate == true && userId != curVault.CreatorId)
+            {
+                throw new Exception("You don't have access to this.");
+            }
             return _kRepo.GetByVault(id);
         }
 

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CodeWorks.Auth0Provider;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services;
@@ -34,11 +35,12 @@ namespace Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Vault> Get(int id)
+        public async Task<ActionResult<Vault>> GetAsync(int id)
         {
             try
             {
-                return Ok(_vService.Get(id));
+                Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+                return Ok(_vService.Get(id, userInfo?.Id));
             }
             catch (System.Exception err)
             {
@@ -47,6 +49,7 @@ namespace Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Vault>> CreateAsync([FromBody] Vault vault)
         {
             try
@@ -65,6 +68,7 @@ namespace Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<Vault>> EditAsync(int id, [FromBody] Vault vault)
         {
             try
@@ -82,6 +86,7 @@ namespace Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult<Vault>> DeleteAsync(int id)
         {
             try
@@ -96,11 +101,12 @@ namespace Controllers
         }
 
         [HttpGet("{id}/keeps")]
-        public ActionResult<Vault> GetKeepsByVault(int id)
+        public async Task<ActionResult<Vault>> GetKeepsByVaultAsync(int id)
         {
             try
             {
-                return Ok(_kService.GetByVault(id));
+                Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
+                return Ok(_kService.GetByVault(id, userInfo?.Id));
             }
             catch (System.Exception err)
             {

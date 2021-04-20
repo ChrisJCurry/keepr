@@ -10,10 +10,10 @@
       <div class="modal-content">
         <div class="modal-body m-1">
           <div class="row d-flex">
-            <div class="col-6">
+            <div class="col-md-6">
               <img :src="state.keep.img" />
             </div>
-            <div class="col-6 pl-0 ml-0 mt-2">
+            <div class="col-md-6 pl-0 ml-0 mt-2">
               <div class="row d-none d-md-flex">
                 <div class="col-3 offset-2">
                   <span class="d-flex">
@@ -42,15 +42,15 @@
                 </div>
               </div>
               <div class="row text-center keep-description">
-                <div class="col">
+                <div class="col-12">
                   <h2>
                     {{ state.keep.description }}
                   </h2>
                 </div>
               </div>
-              <div class="keep-description-border"></div>
-              <div class="row keep-footer p-0 m-0">
-                <div class="col-6">
+              <div class="keep-description-border d-none d-md-flex"></div>
+              <div class="row keep-footer text-center p-0 m-0">
+                <div class="col-12 col-sm-6">
                   <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle"
                             type="button"
@@ -59,21 +59,21 @@
                             aria-haspopup="true"
                             aria-expanded="false"
                     >
-                      Dropdown button
+                      Add to Vault
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                       <div v-for="v in state.userVaults" :key="v.id" @click="selectVault(v.creatorId)">
-                        <a class="dropdown-item">{{ v.name }}</a>
+                        <a class="dropdown-item" @click="addToVault(v.id)">{{ v.name }}</a>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="col">
-                  <div class="row justify-content-end align-items-end mr-5" data-dismiss="modal" v-if="state.keep.creator" @click="viewProfile(state.keep.creatorId)">
-                    <div class="col-2 mr-4">
+                <div class="col-12 col-sm-6 mt-5 mb-2 mt-md-0 mb-md-0">
+                  <div class="row justify-content-center justify-content-md-end align-items-md-end mr-md-5" data-dismiss="modal" v-if="state.keep.creator" @click="viewProfile(state.keep.creatorId)">
+                    <div class="col-2 mr-5">
                       {{ state.keep.creator.nickName }}
                     </div>
-                    <div class="col-1">
+                    <div class="col-1 ml-sm-2">
                       <img :src="state.keep.creator.picture" class="keep-profile">
                     </div>
                   </div>
@@ -88,20 +88,23 @@
 </template>
 
 <script>
-import { computed, reactive } from 'vue'
+import { computed, onMounted, reactive } from 'vue'
 import { AppState } from '../AppState'
 import { logger } from '../utils/Logger'
 import { useRouter } from 'vue-router'
+import { keepsService } from '../services/KeepsService'
 
 export default {
 
   name: 'KeepModal',
   setup() {
     const router = useRouter()
-
     const state = reactive({
       keep: computed(() => AppState.keep),
       userVaults: computed(() => AppState.userVaults)
+    })
+    onMounted(() => {
+      logger.log(state.userVaults)
     })
     return {
       state,
@@ -110,6 +113,9 @@ export default {
       },
       async viewProfile(id) {
         router.push({ name: 'Profile', params: { id: id } })
+      },
+      async addToVault(vaultId) {
+        await keepsService.addToVault(state.keep, vaultId)
       }
     }
   }
@@ -133,13 +139,25 @@ i {
 }
 
 .keep-footer {
-  position: absolute;
-  bottom: 1%;
-  width: 100%;
+  @media(max-width: 768px) {
+    bottom: 1%;
+    width: 100%;
+  }
+
+  @media(min-width: 769px) {
+    position: absolute;
+    bottom: 1%;
+    width: 100%;
+  }
 }
 
 .keep-description {
-  margin-top: 5rem;
+  @media(max-width: 768px) {
+    margin-bottom: 8rem;
+  }
+  @media(min-width: 769px) {
+    margin-top: 4rem;
+  }
 }
 .keep-description-border {
   position: absolute;
@@ -151,7 +169,7 @@ i {
 .modal-body {
   padding: 0 !important;
 }
-.modal-dialogue {
+.modal-dialog {
   padding: 0 !important;
 }
 
@@ -160,7 +178,6 @@ i {
 }
 
 img {
-  height: 30rem;
   width: 100%;
   /* border-top-left-radius: 3%;
   border-bottom-left-radius: 3%; */

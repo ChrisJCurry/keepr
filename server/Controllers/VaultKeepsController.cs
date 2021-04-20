@@ -37,7 +37,7 @@ namespace Controllers
             try
             {
                 Profile userInfo = await HttpContext.GetUserInfoAsync<Profile>();
-                return Ok(_vkService.DeleteAsync(id, userInfo.Id));
+                return Ok(_vkService.DeleteAsync(id, userInfo?.Id));
             }
             catch (System.Exception err)
             {
