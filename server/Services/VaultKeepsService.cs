@@ -23,11 +23,12 @@ namespace Services
 
         internal VaultKeep CreateAsync(VaultKeep newVK, string userId)
         {
-            List<VaultKeep> vk = _vkRepo.GetByVaultId(newVK.VaultId).ToList();
-            if (vk.Any())
-            {
-                throw new Exception("You already added this.");
-            }
+            List<VaultKeepModel> vk = _vkRepo.GetByVaultId(newVK.VaultId).ToList();
+            // List<VaultKeepModel> filtered = vk.Where(vk => vk.Keeps. == newVK.KeepId).ToList();
+            // if (filtered.Any())
+            // {
+            //     throw new Exception("You already added this.");
+            // }
             return _vkRepo.Create(newVK);
         }
 

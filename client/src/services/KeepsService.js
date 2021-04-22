@@ -1,45 +1,41 @@
 import { AppState } from '../AppState'
 import { api } from './AxiosService'
-import { logger } from '../utils/Logger'
+import NotificationsService from '../services/NotificationsService'
 
 class KeepsService {
   async GetAll() {
     try {
       const res = await api.get('api/keeps')
-      logger.log(res)
       AppState.keeps = res.data
     } catch (err) {
-      logger.log(err)
+      await NotificationsService.genericError()
     }
   }
 
   async getAccountKeeps(id) {
     try {
       const res = await api.get('account/keeps')
-      logger.log(res)
       AppState.userKeeps = res.data
     } catch (err) {
-      logger.log(err)
+      await NotificationsService.genericError()
     }
   }
 
   async getByProfile(id) {
     try {
       const res = await api.get('api/profiles/' + id + '/keeps')
-      logger.log(res)
       AppState.keeps = res.data
     } catch (err) {
-      logger.log(err)
+      await NotificationsService.genericError()
     }
   }
 
   async getById(id) {
     try {
       const res = await api.get('api/keeps/' + id)
-      logger.log(res)
       AppState.keep = res.data
     } catch (err) {
-      logger.log(err)
+      await NotificationsService.genericError()
     }
   }
 
@@ -48,9 +44,20 @@ class KeepsService {
       const res = await api.post('api/keeps', keepData)
       AppState.userKeeps.push(res.data)
       AppState.keeps.push(res.data)
-      logger.log(res)
     } catch (err) {
-      logger.log(err)
+      await NotificationsService.genericError('Unable to create this Keep.')
+    }
+  }
+
+  async delete(keepData) {
+    try {
+      if (await NotificationsService.confirmAction('Keep')) {
+        await api.delete('api/keeps/' + keepData.id)
+        return true
+      }
+      return false
+    } catch (err) {
+      await NotificationsService.genericError('Something went wrong deleting your Keep.')
     }
   }
 
@@ -60,20 +67,32 @@ class KeepsService {
         keepId: keep.id,
         vaultId: vaultId
       }
-      const res = await api.post('api/vaultkeeps/', ids)
-      logger.log(res)
+      await api.post('api/vaultkeeps/', ids)
+      await NotificationsService.success()
     } catch (err) {
-      logger.log(err)
+      await NotificationsService.genericError("You've already added this Keep to this Vault.")
+    }
+  }
+
+  async removeFromVault(vkId) {
+    try {
+      await api.delete('api/vaultkeeps/' + vkId)
+      if (await NotificationsService.confirmRemove('Keep')) {
+        await NotificationsService.success()
+        return true
+      }
+      return false
+    } catch (err) {
+      await NotificationsService.genericError('Something went wrong removing this from the Vault.')
     }
   }
 
   async getByVaultId(vaultId) {
     try {
       const res = await api.get('api/vaults/' + vaultId + '/keeps')
-      logger.log(res)
       AppState.keeps = res.data
     } catch (err) {
-      logger.log(err)
+      await NotificationsService.genericError('Unable to get from this Vault.')
     }
   }
 }

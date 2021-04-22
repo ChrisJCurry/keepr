@@ -17,20 +17,17 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="row mt-2">
+          <div class="row mt-2 justify-content-center">
             <input type="text" placeholder="Title" v-model="state.newKeep.name" />
           </div>
-          <div class="row my-2">
+          <div class="row my-2 justify-content-center">
             <input type="text" placeholder="Description" v-model="state.newKeep.description" />
           </div>
-          <div class="row my-2">
-            <input type="text" placeholder="Image URL?" v-model="state.newKeep.img" />
-          </div>
-          <div class="row my-2">
-            <input type="file" placeholder="Image File" @change="onChange" accept="image/*" />
+          <div class="row my-2 justify-content-center">
+            <input type="text" placeholder="Image URL?" v-model="state.newKeep.img" @change="onChange" />
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Close
           </button>
@@ -56,16 +53,13 @@ export default {
     const state = reactive({
       newKeep: {},
       account: computed(() => AppState.account),
-      file: 'https://i.ibb.co/cwq36B9/Choko-Scrunch.jpg'
+      file: ''
     })
     return {
       state,
       async createKeep() {
         try {
-          logger.log(state.newKeep)
-          state.newKeep.img = state.file
           await keepsService.create(state.newKeep)
-          logger.log(route.path)
           if (route.path === '/account') {
             await keepsService.getByProfile(state.account.id)
           }
@@ -75,9 +69,7 @@ export default {
         }
       },
       onChange() {
-        const files = event.target.files
-        const fileArray = Array.from(files)
-        logger.log(fileArray)
+        state.file = state.newKeep.img
       }
     }
   }

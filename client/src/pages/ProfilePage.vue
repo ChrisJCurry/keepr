@@ -1,7 +1,21 @@
 <template>
   <div class="profile container-fluid text-center">
-    <h1>Welcome to {{ state.profile.nickName }}'s Profile!</h1>
-    <img class="rounded" :src="state.profile.picture" alt="" />
+    <div class="row my-5">
+      <div class="col-5 col-sm-3 col-md-2">
+        <img class="rounded mt-2" :src="state.profile.picture" alt="" />
+      </div>
+      <div class="col-4 text-left">
+        <p class="h1">
+          {{ state.profile.nickName }}
+        </p>
+        <p class="h4">
+          Vaults: {{ state.vaults.length }}
+        </p>
+        <p class="h4">
+          Keeps: {{ state.keeps.length }}
+        </p>
+      </div>
+    </div>
     <div class="row text-left ml-3">
       <div class="col-4 col-md-2">
         <h1 class="title">
@@ -10,7 +24,11 @@
       </div>
     </div>
     <div class="row" v-if="state.vaults">
-      <Vault v-for="v in state.vaults" :key="v.id" :vault-prop="v" class="col-3 mx-2" />
+      <div v-for="v in state.vaults" :key="v.id" class="col-3 mx-2">
+        <router-link :to="{ name: 'Vault', params: {id: v.id} }">
+          <Vault :vault-prop="v" />
+        </router-link>
+      </div>
     </div>
     <div class="row text-left ml-3">
       <div class="col-4 col-md-2">
@@ -24,6 +42,7 @@
         <div class="card-columns">
           <div v-for="k in state.keeps" :key="k.id">
             <Keep :keep-prop="k" />
+            <KeepModal />
           </div>
         </div>
       </div>
@@ -38,7 +57,7 @@ import { keepsService } from '../services/KeepsService'
 import { vaultsService } from '../services/VaultsService'
 import { profilesService } from '../services/ProfilesService'
 import { useRoute } from 'vue-router'
-import { logger } from '../utils/Logger'
+
 export default {
   name: 'Profile',
   setup() {
@@ -50,9 +69,7 @@ export default {
       vaults: computed(() => AppState.vaults)
     })
     onMounted(async() => {
-      logger.log(route.params.id)
       state.profile = await profilesService.getProfile(route.params.id)
-      logger.log('profile: ', state.profile)
       await keepsService.getByProfile(state.profile.id)
       await vaultsService.getByProfile(state.profile.id)
     })
@@ -78,13 +95,20 @@ img {
 
 .card-columns {
   //small
-  @media(max-width: 767px) {
+  @media(max-width: 599px) {
+    column-count: 1;
+  }
+  //small
+  @media(min-width: 600px) {
     column-count: 2;
   }
-  @media(min-width: 768px) {
+  @media(min-width: 773px) {
     column-count: 3;
   }
-  @media(min-width: 1200px) {
+  @media(min-width: 992px) {
+    column-count: 3;
+  }
+  @media(min-width: 1920px) {
     column-count: 4;
   }
 }

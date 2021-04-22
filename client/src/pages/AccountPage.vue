@@ -1,8 +1,21 @@
 <template>
-  <div class="account container-fluid text-center">
-    <h1>Welcome {{ state.account.nickName }}</h1>
-    <img class="rounded" :src="state.account.picture" alt="" />
-    <p>{{ state.account.email }}</p>
+  <div class="account container-fluid">
+    <div class="row my-5">
+      <div class="col-5 col-sm-3 col-md-2">
+        <img class="rounded mt-2" :src="state.account.picture" alt="" />
+      </div>
+      <div class="col-4 text-left">
+        <p class="h1">
+          {{ state.account.nickName }}
+        </p>
+        <p class="h4">
+          Vaults: {{ state.userVaults.length }}
+        </p>
+        <p class="h4">
+          Keeps: {{ state.userKeeps.length }}
+        </p>
+      </div>
+    </div>
     <div class="row text-left ml-3">
       <div class="col-4 col-md-3">
         <h1 class="title">
@@ -13,11 +26,11 @@
         <i class="gg-add-r mr-2 icon"></i>
       </div>
     </div>
-    <div class="row" v-if="state.userVaults">
-      <div v-for="v in state.userVaults" :key="v.id" class="col-3 mx-2">
-        <router-link :to="{ name: 'Vault', params: {id: v.id} }">
+    <div class="row justify-content-center" v-if="state.userVaults">
+      <div class="card-columns">
+        <div v-for="v in state.userVaults" :key="v.id" class="col">
           <Vault :vault-prop="v" />
-        </router-link>
+        </div>
       </div>
     </div>
     <div class="row text-left ml-3">
@@ -30,12 +43,11 @@
         <i class="gg-add-r mr-2 icon"></i>
       </div>
     </div>
-    <div class="row">
-      <div v-if="state.userKeeps">
-        <div class="card-columns">
-          <div v-for="k in state.userKeeps" :key="k.id">
-            <Keep :keep-prop="k" />
-          </div>
+    <div class="row ml-3" v-if="state.userKeeps">
+      <div class="card-columns">
+        <div v-for="k in state.userKeeps" :key="k.id">
+          <Keep :keep-prop="k" />
+          <KeepModal />
         </div>
       </div>
     </div>
@@ -68,7 +80,7 @@ export default {
 
 <style scoped lang="scss">
 img {
-  max-width: 100px;
+  max-width: 30rem;
 }
 
 .icon {
@@ -81,13 +93,20 @@ img {
 
 .card-columns {
   //small
-  @media(max-width: 767px) {
+  @media(max-width: 599px) {
+    column-count: 1;
+  }
+  //small
+  @media(min-width: 600px) {
     column-count: 2;
   }
-  @media(min-width: 768px) {
+  @media(min-width: 773px) {
     column-count: 3;
   }
-  @media(min-width: 1200px) {
+  @media(min-width: 992px) {
+    column-count: 3;
+  }
+  @media(min-width: 1920px) {
     column-count: 4;
   }
 }

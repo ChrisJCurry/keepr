@@ -38,18 +38,21 @@ namespace Repositories
             string sql = "SELECT * FROM vaultkeeps WHERE id = @id;";
             return _db.QueryFirstOrDefault<VaultKeep>(sql, new { id });
         }
-
-        internal IEnumerable<VaultKeep> GetByVaultId(int id)
+        internal IEnumerable<VaultKeepModel> GetByVaultId(int id)
         {
             string sql = @"
             SELECT
             vk.*,
+            k.*,
+            vk.id AS VaultKeepId,
             profile.*
-            FROM vaultkeeps vk 
+            FROM vaultkeeps vk
+            JOIN keeps k ON vk.keepId = k.id
             JOIN profiles profile ON vk.creatorId = profile.id
             WHERE vk.vaultId = @id;";
-            return _db.Query<VaultKeep, Profile, VaultKeep>(sql, (vk, profile) =>
+            return _db.Query<VaultKeepModel, Profile, VaultKeepModel>(sql, (vk, profile) =>
             {
+                vk.Creator = profile;
                 return vk;
             }, new { id }, splitOn: "id");
         }

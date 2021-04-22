@@ -17,29 +17,29 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="row mt-2">
+          <div class="row mt-2 justify-content-center">
             <input type="text" placeholder="Title" v-model="state.newVault.name" />
           </div>
-          <div class="row my-2">
+          <div class="row my-2 justify-content-center">
             <input type="text" placeholder="Description" v-model="state.newVault.description" />
           </div>
-          <div class="row">
+          <div class="row justify-content-center text-center">
             <div class="col-12">
-              <label for="vault-private">Public?</label>
+              <label for="vault-private">Private?</label>
             </div>
           </div>
-          <div class="col-12 p-0">
+          <div class="col-12 p-0 justify-content-center text-center">
             <input type="checkbox" id="vault-private" v-model="state.newVault.isPrivate" />
             <p class="label-muted">
-              Leave this unchecked if you don't want it visible to anyone else.
+              Check this if you don't want it visible to anyone else.
             </p>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Close
           </button>
-          <button type="button" class="btn btn-primary" @click="createVault">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" @click="createVault">
             Create Vault
           </button>
         </div>
@@ -62,9 +62,9 @@ export default {
       state,
       async createVault() {
         try {
-          logger.log(state.newVault)
           await vaultsService.create(state.newVault)
           await vaultsService.getAccountVaults()
+          state.newVault = {}
         } catch (err) {
           logger.log(err)
         }

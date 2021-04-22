@@ -8,11 +8,14 @@ namespace Services
     public class KeepsService
     {
         private readonly KeepsRepository _kRepo;
+
+        private readonly VaultKeepsRepository _vkRepo;
         private readonly VaultsService _vService;
 
-        public KeepsService(KeepsRepository kRepo, VaultsService vService)
+        public KeepsService(KeepsRepository kRepo, VaultKeepsRepository vkRepo, VaultsService vService)
         {
             _kRepo = kRepo;
+            _vkRepo = vkRepo;
             _vService = vService;
         }
 
@@ -73,14 +76,13 @@ namespace Services
             Vault curVault = _vService.Get(id, userId);
             if (curVault == null)
             {
-                
                 throw new Exception("Could not find this vault.");
             }
             if (curVault.IsPrivate == true && userId != curVault.CreatorId)
             {
                 throw new Exception("You don't have access to this.");
             }
-            return _kRepo.GetByVault(id);
+            return _vkRepo.GetByVaultId(id);
         }
 
         internal IEnumerable<Keep> GetKeepsByAccountId(string id)

@@ -33,19 +33,6 @@ namespace Controllers
             }
         }
 
-        // [HttpGet("{id}/blogs")]
-        // public ActionResult<CreatorBlog> GetBlogs(string id)
-        // {
-        //     try
-        //     {
-        //         return Ok(_blogService.GetByCreatorId(id));
-        //     }
-        //     catch (System.Exception err)
-        //     {
-        //         return BadRequest(err.Message);
-        //     }
-        // }
-
         [HttpGet("{id}/vaults")]
         public ActionResult<Vault> GetVaults(string id)
         {

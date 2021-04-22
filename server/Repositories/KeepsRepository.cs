@@ -97,16 +97,5 @@ namespace Repositories
             return update;
         }
 
-        internal IEnumerable<VaultKeepModel> GetByVault(int id)
-        {
-            string sql = @"
-            SELECT
-            k.*,
-            vk.id AS VaultKeepId
-            FROM VaultKeeps vk
-            JOIN keeps k ON k.id = vk.keepId
-            WHERE vaultId = @id;";
-            return _db.Query<VaultKeepModel>(sql, new { id });
-        }
     }
 }
