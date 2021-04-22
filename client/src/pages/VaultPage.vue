@@ -24,6 +24,8 @@ import { keepsService } from '../services/KeepsService'
 import { vaultsService } from '../services/VaultsService'
 import Router from '../router'
 import NotificationsService from '../services/NotificationsService'
+import { logger } from '../utils/Logger'
+import { AuthService } from '../services/AuthService'
 export default {
   name: 'Vault',
   setup() {
@@ -33,15 +35,19 @@ export default {
       vault: computed(() => AppState.vault)
     })
     onMounted(async() => {
-      if (state.account) {
-        vaultsService.getById(Router.currentRoute.value.params.id)
-        keepsService.getByVaultId(Router.currentRoute.value.params.id)
-      }
-      if (!state.account.name && state.vault.isPrivate) {
+      if (state.vault.isPrivate) {
+        logger.log('before')
         await NotificationsService.genericError('Something went wrong getting keeps from the Vault.')
+        logger.log('after')
+
         Router.push({ name: 'Home' })
+
         keepsService.GetAll()
       }
+      AuthService.on(AuthService.AUTH_EVENTS.LOADED, async function() {
+        vaultsService.getById(Router.currentRoute.value.params.id)
+        keepsService.getByVaultId(Router.currentRoute.value.params.id)
+      })
     })
     return {
       state,

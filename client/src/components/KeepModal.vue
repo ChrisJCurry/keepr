@@ -53,7 +53,7 @@
                 </div>
               </div>
               <div class="row text-center mx-0 pb-4" v-if="state.account.name">
-                <div class="col" v-if="vaultKeepIdProp != -1">
+                <div class="col" v-if="vaultKeepIdProp != -1 && (state.keep.creatorId === state.account.id)">
                   <button class="btn btn-danger p-1" type="button" @click="removeFromVault(vaultKeepIdProp)">
                     Remove from Vault
                   </button>

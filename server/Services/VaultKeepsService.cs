@@ -38,7 +38,7 @@ namespace Services
             Vault original = _vService.Get(originalVK.VaultId, userId);
             Keep originalKeep = _kService.Get(originalVK.KeepId);
             Console.WriteLine("yo" + originalKeep.Id);
-            if (original.IsPrivate && userId != original.CreatorId)
+            if (userId != original.CreatorId)
             {
                 throw new Exception("You can't access this.");
             }

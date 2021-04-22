@@ -1,6 +1,7 @@
 import { AppState } from '../AppState'
 import { api } from './AxiosService'
 import NotificationsService from '../services/NotificationsService'
+import Router from '../router'
 
 class VaultsService {
   async getAccountVaults() {
@@ -27,6 +28,7 @@ class VaultsService {
       AppState.vault = res.data
     } catch (err) {
       await NotificationsService.genericError()
+      Router.push({ name: 'Home' })
     }
   }
 

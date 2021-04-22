@@ -1,7 +1,7 @@
 import { AppState } from '../AppState'
 import { api } from './AxiosService'
 import NotificationsService from '../services/NotificationsService'
-
+import Router from '../router'
 class KeepsService {
   async GetAll() {
     try {
@@ -93,6 +93,7 @@ class KeepsService {
       AppState.keeps = res.data
     } catch (err) {
       await NotificationsService.genericError('Unable to get from this Vault.')
+      Router.push({ name: 'Home' })
     }
   }
 }
