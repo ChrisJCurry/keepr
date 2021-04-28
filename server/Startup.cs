@@ -100,6 +100,12 @@ namespace server
 
             app.UseAuthorization();
 
+            //use the dfault file paths for finding the client
+            app.UseDefaultFiles();
+
+            //use a static fie for serving the client
+            app.UseStaticFiles();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

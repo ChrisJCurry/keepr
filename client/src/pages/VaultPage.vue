@@ -31,23 +31,30 @@ export default {
   setup() {
     const state = reactive({
       account: computed(() => AppState.account),
+      user: computed(() => AppState.user),
       keeps: computed(() => AppState.keeps),
       vault: computed(() => AppState.vault)
     })
-    onMounted(async() => {
-      if (state.vault.isPrivate) {
-        logger.log('before')
+
+    async function checkAuthentication() {
+      vaultsService.getById(Router.currentRoute.value.params.id)
+      keepsService.getByVaultId(Router.currentRoute.value.params.id)
+      if (state.vault.isPrivate && state.vault.creatorId !== state.account.id) {
         await NotificationsService.genericError('Something went wrong getting keeps from the Vault.')
-        logger.log('after')
 
         Router.push({ name: 'Home' })
 
         keepsService.GetAll()
       }
+    }
+    onMounted(async() => {
       AuthService.on(AuthService.AUTH_EVENTS.LOADED, async function() {
-        vaultsService.getById(Router.currentRoute.value.params.id)
-        keepsService.getByVaultId(Router.currentRoute.value.params.id)
+        logger.log('yo')
+        await checkAuthentication()
       })
+      if (state.user.isAuthenticated) {
+        await checkAuthentication()
+      }
     })
     return {
       state,
